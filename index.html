@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Gif Time</title>
+    <link href="https://fonts.googleapis.com/css?family=Orbitron" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="container">
+        <h2>True American Heroes</h2>
+        <!-- Rendered Buttons will get Dumped Here  -->
+        <div id="buttons-view"></div>
+        <!-- Form To Add A Hero-->
+        <form id="movie-form">
+            <label for="celeb-input">Add an American Hero</label>
+            <input type="text" id="celeb-input">
+            <br>
+            <!-- Button triggers new celeb to be added -->
+            <input id="add-celeb" type="submit" value="++++">
+        </form>
+        <!-- Gifs will Get Dumped Dere -->
+        <div id="gifs-view"></div>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script type="text/javascript">
+        // Initial array of celebs
+        var celebs = ["Lin Manuel Miranda", "Beyonce", "Barack Obama", "Joanne The Scammer", "Viola Davis", "Lady Gaga", "Jon Snow", "Maxine Waters", "Will and Grace", "Tiffany Pollard", "Jessica Lange", "Cardi B", "Whitney Houston", "Moana", "Barack Obama", "Michelle Obama", "Tamar Braxton", "Missy Elliot", "White Guy Blinking"];
+
+        // This function will render buttons
+        function renderButtons() {
+            // Deleting the celebs prior to adding new celebs
+            // (this is necessary otherwise you will have repeat buttons)
+            $("#buttons-view").empty();
+            // Looping through the array of celebs
+            for (var i = 0; i < celebs.length; i++) {
+                // Then dynamicaly generating buttons for each celeb in the array
+                // This code $("<button>") is all jQuery needs to create the beginning and end tag. (<button></button>)
+                var a = $("<button>");
+                // Adding a class of celeb to our button
+                a.addClass("celeb");
+                // Adding a data-attribute
+                a.attr("data-name", celebs[i]);
+                // Providing the initial button text
+                a.text(celebs[i]);
+                // Adding the button to the buttons-view div
+                $("#buttons-view").append(a);
+            }
+        }
+
+        // This function will display the Gifs
+        function displayGif() {
+            $("#gifs-view").empty();
+            var celeb = $(this).attr("data-name");
+            var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + celeb + "&api_key=rIAyFSa8avQEBnDthrU9UTnLPsnbT4VR&limit=10"
+            $.ajax({
+                url: queryURL,
+                method: "GET"
+            }).done(function(response) {
+                // Variable to store the ajax response data
+                var results = response.data;
+                for (var i = 0; i < results.length; i++) {
+                    var celebDiv = $("<div>");
+                    var p = $("<p>").text("Rating: " + results[i].rating);
+
+                    // Creating and storing an image tag
+                    var celebImage = $("<img>");
+                    // Make The Image appear still first but also add attributes for later to call
+                    $(celebImage).attr("src", results[i].images.fixed_height.url.replace('.gif', '_s.gif'));
+                    celebImage.attr("data-state", "still")
+                    celebImage.addClass("giffy");
+                    celebImage.attr("data-animate", results[i].images.fixed_height.url);
+                    celebImage.attr("data-still", results[i].images.fixed_height.url.replace('.gif', '_s.gif'));
+
+                    // Appending the paragraph and image tag to the celebDiv
+                    celebDiv.append(p);
+                    celebDiv.append(celebImage);
+
+                    // Prependng the celebDiv to the HTML page in the "#gifs-view" div
+                    $("#gifs-view").prepend(celebDiv); 
+                  }
+
+                    // on click function for stopping and starting gifs
+                    $(".giffy").on("click", function() {
+                        var state = $(this).attr("data-state");
+                        // If the clicked image's state is still, update its src attribute to what its data-animate value is.
+                        // Then, set the image's data-state to animate
+                        // Else set src to the data-still value
+                        if (state === "still") {
+                            $(this).attr("src", $(this).attr("data-animate"));
+                            $(this).attr("data-state", "animate");
+                        } else {
+                            $(this).attr("src", $(this).attr("data-still"));
+                            $(this).attr("data-state", "still");
+                        }
+                    });
+                });
+            };
+        
+
+
+
+        // Function for adding a new hero =)
+        $("#add-celeb").on("click", function(event) {
+            event.preventDefault();
+            // This line grabs the input from the textbox
+            var newCeleb = $("#celeb-input").val().trim();
+
+            // Adding celeb from the textbox to our array
+            celebs.push(newCeleb);
+
+            // Calling renderButtons which handles the processing of our celeb array
+            renderButtons();
+        });
+
+        // this function displays gifs on click of rendered buttons
+        $(document).on("click", ".celeb", displayGif);
+
+        // Calling the renderButtons function to display the intial buttons
+        renderButtons();
+        </script>
+    </div>
+</body>
+
+</html>

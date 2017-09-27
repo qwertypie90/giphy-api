@@ -1,0 +1,39 @@
+html {
+    background-image: url("https://wallpaperbrowse.com/media/images/tumblr-backgrounds-giflumineux-and-small-girls-perfect-oqkvdrnp.gif");
+}
+
+h2 {
+    text-align: center;
+    font-family: 'Orbitron', sans-serif;
+    color: #FFFFFF;
+}
+
+#movie-form {
+    text-align: center;
+    font-family: 'Orbitron', sans-serif;
+    color: #FFFFFF;	
+}
+
+
+
+.celeb {
+    border: 2px solid #73AD21;
+    border-radius: 20px;
+    background-color: #C71585;
+    padding: 10px;
+    margin: 3px;
+    font-family: 'Orbitron', sans-serif;
+}
+
+#gifs-view {
+  display: flex;
+  flex-wrap: wrap;
+
+}
+
+p {
+    text-align: center;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 8px;
+    color: #FFFFFF;
+}
