@@ -1,6 +1,8 @@
 # Giphy API App
 
 This giphy web app was created in 2017. It is inspired by all 19 of my most favorite American Heroes and is deliciously designed with the 90s and space in mind!
+
+
 ![demo](spacey.gif)
 
 
